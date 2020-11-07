@@ -64,6 +64,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 const authRoutes = require('./routes/auth.routes')
 app.use('/api', authRoutes);
 
+const userRoutes = require('./routes/user.routes')
+app.use('/api', userRoutes)
+
 
 app.use((req, res, next) => {
   // If no routes match, send them the React HTML.

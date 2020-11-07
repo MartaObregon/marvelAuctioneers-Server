@@ -5,8 +5,9 @@ const UserModel = require('../models/User.model')
 
 
 
-router.post('/register', (req, res)=>{
+router.post('/register', (req, res)=>{ 
   const{email, username, password} = req.body
+  let wallet_credit = 0
   if (!username || !email || !password) {
     res.status(500)
       .json({
@@ -22,15 +23,16 @@ router.post('/register', (req, res)=>{
         });
         return;  
     }
-    console.log('Hello')
+    
     bcrypt.genSalt(12)
       .then((salt)=>{
         bcrypt.hash(password, salt)
           .then((passwordHash)=>{
-            UserModel.create({email,username,password: passwordHash})
+            UserModel.create({email,username,password: passwordHash, wallet_credit})
               .then((user)=>{
                 user.passwordHash = "***";
                 req.session.loggedInUser = user;
+                wallet_credit = user.wallet_credit
                 res.status(200).json(user);
               })
               .catch((err)=>{
