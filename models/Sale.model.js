@@ -7,10 +7,10 @@ const saleSchema = new Schema ({
     enum: ["good condition", "worn-off", "damaged"],
     required: true,
   },
-  comicId: {
-    type: String,
-    required: true
-  },
+  // comicId: {
+  //   type: String,
+  //   required: true
+  // },
   seller: {
     type: Schema.Types.ObjectId,
     ref: 'User'
