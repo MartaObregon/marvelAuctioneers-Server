@@ -33,6 +33,9 @@ const saleSchema = new Schema ({
   },
   image_url: {
     type: String
+  },
+  release_year: {
+    type: Number
   }
 })
 

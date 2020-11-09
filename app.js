@@ -67,6 +67,9 @@ app.use('/api', authRoutes);
 const userRoutes = require('./routes/user.routes')
 app.use('/api', userRoutes)
 
+const mainRoutes = require('./routes/main.routes')
+app.use('/api', mainRoutes)
+
 
 app.use((req, res, next) => {
   // If no routes match, send them the React HTML.

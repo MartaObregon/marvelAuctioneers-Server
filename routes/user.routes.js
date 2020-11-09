@@ -33,7 +33,8 @@ router.patch('/profile/edit', (req, res)=>{
 })
 
 router.post('/profile/add-sale', (req, res)=>{
-  const {title, description, image_url, expiring_date, state, starting_price} = req.body;
+  const {title, description, image_url, expiring_date, state, starting_price, release_year} = req.body;
+  console.log(req.body)
   SaleModel.create({
     title,
     description,
@@ -43,6 +44,7 @@ router.post('/profile/add-sale', (req, res)=>{
     starting_price,
     seller: req.session.loggedInUser._id,
     winning_buyer: null,
+    release_year,
 
   })
     .then((response)=>{
