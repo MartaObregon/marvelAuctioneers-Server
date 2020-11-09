@@ -32,7 +32,7 @@ router.post('/register', (req, res)=>{
               .then((user)=>{
                 user.passwordHash = "***";
                 req.session.loggedInUser = user;
-                wallet_credit = user.wallet_credit
+                // wallet_credit = user.wallet_credit
                 res.status(200).json(user);
               })
               .catch((err)=>{

@@ -4,7 +4,7 @@ const {Schema , model} = require('mongoose')
 const saleSchema = new Schema ({
   state: {
     type: String,
-    enum: ["good condition", "worn off", "damaged"],
+    enum: ["good condition", "worn-off", "damaged"],
     required: true,
   },
   comicId: {
@@ -21,6 +21,18 @@ const saleSchema = new Schema ({
   winning_buyer: {
     type: Schema.Types.ObjectId,
     ref: 'User'
+  },
+  expiring_date: {
+    type: Date
+  }, 
+  title: {
+    type: String
+  },
+  description: {
+    type: String
+  },
+  image_url: {
+    type: String
   }
 })
 
