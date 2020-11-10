@@ -18,8 +18,13 @@ const bidSchema = new Schema ({
   bid_price: {
     type: Number,
   },
+  
 
-})
+},
+{
+  timestamps:true
+}
+)
 
 
 module.exports = model('Bid', bidSchema)

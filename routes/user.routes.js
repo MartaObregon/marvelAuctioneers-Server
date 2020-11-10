@@ -1,7 +1,7 @@
 const express = require('express')
 const SaleModel = require('../models/Sale.model')
 const router = express.Router()
-
+let BidModel = require('../models/Bid.model')
 let UserModel = require('../models/User.model')
 
 
@@ -58,5 +58,39 @@ router.post('/profile/add-sale', (req, res)=>{
     })
 })
 
+router.get('/sale/:id', (req, res)=>{
+  let saleid = req.params.id
+  BidModel.find({sale_id: saleid})
+    .then((response)=>{
+      res.status(200).json(response)
+    })
+    .catch((err)=>{
+      res.status(500).json({
+        error: 'Something went wrong',
+        message: err,
+      })
+    })
+})
+
+router.post('/sale/:id', (req, res)=>{
+  const {bid_price} = req.body;
+  
+  BidModel.create({
+    status: 'pending',
+    sale_id: req.params.id,
+    bidder_id: req.session.loggedInUser._id,
+    bid_price,
+  })
+  .then((response)=>{
+    
+    res.status(200).json(response)
+  })
+  .catch((err)=>{
+    res.status(500).json({
+      error: 'Something went wrong',
+      message: err,
+    })
+  })
+})
 
 module.exports =router
