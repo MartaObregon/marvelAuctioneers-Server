@@ -1,4 +1,5 @@
 const express = require('express')
+const BidModel = require('../models/Bid.model')
 const SaleModel = require('../models/Sale.model')
 const router = express.Router()
 
@@ -30,6 +31,25 @@ router.get('/detail/:id', (req, res)=>{
           message: err,
         })
       })
+})
+
+router.get('/profile/sale/:userid', (req, res)=>{
+  let userid = req.params.userid
+  BidModel.find({bidder_id: userid})
+  .then((bids)=>{ //all bids [] where the user is the bidder
+    // let id = bids.data.sale_id
+    console.log(bids)
+    // SaleModel.findById(id)
+    // .then((sales)=>{
+    //   res.status(200).json(sales)
+    // })
+    // .catch((err)=>{
+    //   res.status(500).json({
+    //     error: 'Something went wrong',
+    //     message: err,
+    //   })
+    // })
+  })
 })
 
 module.exports = router

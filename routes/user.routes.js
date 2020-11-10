@@ -58,6 +58,22 @@ router.post('/profile/add-sale', (req, res)=>{
     })
 })
 
+router.get('/profile/:id/mybids', (req, res)=>{
+  let userId = req.params.id
+  BidModel.find({bidder_id: userId})
+  .then((response)=>{
+    res.status(200).json(response)
+  })
+  .catch((err)=>{
+    res.status(500).json({
+      error: 'Something went wrong',
+      message: err,
+    })
+  })
+
+})
+
+
 router.get('/sale/:id', (req, res)=>{
   let saleid = req.params.id
   BidModel.find({sale_id: saleid})
@@ -72,6 +88,23 @@ router.get('/sale/:id', (req, res)=>{
     })
 })
 
+router.get('/sale/username/:sellerId', (req, res)=>{
+  let  sellerid = req.params.sellerId
+  console.log('hey', req.params.sellerId)
+  UserModel.findById(sellerid)
+  .then((response)=>{
+    res.status(200).json(response)
+  })
+  .catch((err)=>{
+    res.status(500).json({
+      error: 'Something went wrong',
+      message: err,
+    })
+  })
+
+})
+
+
 router.post('/sale/:id', (req, res)=>{
   const {bid_price} = req.body;
   
@@ -80,6 +113,7 @@ router.post('/sale/:id', (req, res)=>{
     sale_id: req.params.id,
     bidder_id: req.session.loggedInUser._id,
     bid_price,
+    bidder_username: req.session.loggedInUser.username
   })
   .then((response)=>{
     
