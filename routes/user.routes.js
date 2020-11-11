@@ -130,10 +130,7 @@ router.post('/sale/:id', (req, res)=>{
           })
           .then(()=>{
             res.status(200).json(response)
-          
-            
           })
-         
         }
      
         else{
@@ -154,5 +151,7 @@ router.post('/sale/:id', (req, res)=>{
     })
   })
 })
+
+
 
 module.exports =router
