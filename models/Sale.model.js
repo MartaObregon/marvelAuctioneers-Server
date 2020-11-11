@@ -36,6 +36,9 @@ const saleSchema = new Schema ({
   },
   release_year: {
     type: Number
+  },
+  winning_bid: {
+    type: Number
   }
 })
 

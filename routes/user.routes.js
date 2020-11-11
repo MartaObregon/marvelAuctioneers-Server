@@ -34,6 +34,8 @@ router.patch('/profile/edit', (req, res)=>{
 
 router.post('/profile/add-sale', (req, res)=>{
   const {title, description, image_url, expiring_date, state, starting_price, release_year} = req.body;
+
+
   console.log(req.body)
   SaleModel.create({
     title,
@@ -45,6 +47,7 @@ router.post('/profile/add-sale', (req, res)=>{
     seller: req.session.loggedInUser._id,
     winning_buyer: null,
     release_year,
+    winning_bid: starting_price,
 
   })
     .then((response)=>{
@@ -104,10 +107,10 @@ router.get('/sale/username/:sellerId', (req, res)=>{
 
 })
 
-
+//logic for bidder auth
 router.post('/sale/:id', (req, res)=>{
   const {bid_price} = req.body;
-  
+
   BidModel.create({
     status: 'pending',
     sale_id: req.params.id,
@@ -116,8 +119,33 @@ router.post('/sale/:id', (req, res)=>{
     bidder_username: req.session.loggedInUser.username
   })
   .then((response)=>{
+    saleId = response.sale_id
+    SaleModel.findById(saleId)
+      .then((sale)=>{
+        console.log(response.bid_price, sale.starting_price, sale.winning_bid)
+        if(response.bid_price > sale.starting_price  && response.bid_price > sale.winning_bid ){
+          SaleModel.findByIdAndUpdate(sale._id, {
+            winning_buyer: response.bidder_id,
+            winning_bid: response.bid_price
+          })
+          .then(()=>{
+            res.status(200).json(response)
+          
+            
+          })
+         
+        }
+     
+        else{
+          res.status(500)
+          .json({
+            errorMessage: 'Please enter your bid always surpassing the latest quantity'
+          })
+         
+        }
+        
+      })
     
-    res.status(200).json(response)
   })
   .catch((err)=>{
     res.status(500).json({
