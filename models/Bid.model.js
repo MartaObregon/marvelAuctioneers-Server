@@ -2,10 +2,8 @@ const {Schema , model} = require('mongoose')
 
 
 const bidSchema = new Schema ({
-  status: {
-    type: String,
-    enum: ["pending", "won", "lost"],
-    required: true,
+  winner: {
+    type: Boolean,
   },
   sale_id: {
     type: Schema.Types.ObjectId,

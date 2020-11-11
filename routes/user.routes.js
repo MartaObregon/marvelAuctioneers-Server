@@ -112,7 +112,7 @@ router.post('/sale/:id', (req, res)=>{
   const {bid_price} = req.body;
 
   BidModel.create({
-    status: 'pending',
+    winner: false,
     sale_id: req.params.id,
     bidder_id: req.session.loggedInUser._id,
     bid_price,
@@ -129,6 +129,7 @@ router.post('/sale/:id', (req, res)=>{
             winning_bid: response.bid_price
           })
           .then(()=>{
+            console.log(response)
             res.status(200).json(response)
           })
         }
@@ -152,6 +153,27 @@ router.post('/sale/:id', (req, res)=>{
   })
 })
 
+router.patch('/profile/:idsale/payment', (req, res)=>{
+  let id = req.session.loggedInUser._id
+  let saleid = req.params.idsale
+
+  SaleModel.findById(saleid)
+    .then((sale)=>{
+      UserModel.findById(id)
+      .then((user)=>{
+        let updatedCredit = user.wallet_credit - sale.winning_bid
+        UserModel.updateOne({$set:{wallet_credit: updatedCredit}})
+        .then((response)=>{
+          res.status(200).json(response)
+        })
+       
+      })
+    })
+
+
+
+  
+})
 
 
 module.exports =router
