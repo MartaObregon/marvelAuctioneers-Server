@@ -48,6 +48,8 @@ router.post('/profile/add-sale', (req, res)=>{
     winning_buyer: null,
     release_year,
     winning_bid: starting_price,
+    close: false,
+    paymentCompleted: false,
 
   })
     .then((response)=>{
@@ -61,20 +63,7 @@ router.post('/profile/add-sale', (req, res)=>{
     })
 })
 
-router.get('/profile/:id/mybids', (req, res)=>{
-  let userId = req.params.id
-  BidModel.find({bidder_id: userId})
-  .then((response)=>{
-    res.status(200).json(response)
-  })
-  .catch((err)=>{
-    res.status(500).json({
-      error: 'Something went wrong',
-      message: err,
-    })
-  })
 
-})
 
 
 router.get('/sale/:id', (req, res)=>{
@@ -130,7 +119,7 @@ router.post('/sale/:id', (req, res)=>{
           })
           .then(()=>{
             console.log(response)
-            res.status(200).json(response)
+            res.status(200).json(response[0])
           })
         }
      
@@ -153,27 +142,6 @@ router.post('/sale/:id', (req, res)=>{
   })
 })
 
-router.patch('/profile/:idsale/payment', (req, res)=>{
-  let id = req.session.loggedInUser._id
-  let saleid = req.params.idsale
-
-  SaleModel.findById(saleid)
-    .then((sale)=>{
-      UserModel.findById(id)
-      .then((user)=>{
-        let updatedCredit = user.wallet_credit - sale.winning_bid
-        UserModel.updateOne({$set:{wallet_credit: updatedCredit}})
-        .then((response)=>{
-          res.status(200).json(response)
-        })
-       
-      })
-    })
-
-
-
-  
-})
 
 
 module.exports =router

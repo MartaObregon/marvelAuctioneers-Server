@@ -39,6 +39,12 @@ const saleSchema = new Schema ({
   },
   winning_bid: {
     type: Number
+  },
+  close: {
+    type: Boolean
+  },
+  paymentCompleted: {
+    type: Boolean,
   }
 })
 
