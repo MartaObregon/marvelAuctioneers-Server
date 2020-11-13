@@ -74,7 +74,7 @@ router.get('/sale/:id', (req, res)=>{
     })
     .catch((err)=>{
       res.status(500).json({
-        error: 'Something went wrong',
+        error: 'Please sign in or register first to access a sale detail page',
         message: err,
       })
     })
@@ -99,40 +99,36 @@ router.get('/sale/username/:sellerId', (req, res)=>{
 //logic for bidder auth
 router.post('/sale/:id', (req, res)=>{
   const {bid_price} = req.body;
+  let saleId = req.params.id
 
-  BidModel.create({
-    winner: false,
-    sale_id: req.params.id,
-    bidder_id: req.session.loggedInUser._id,
-    bid_price,
-    bidder_username: req.session.loggedInUser.username
-  })
-  .then((response)=>{
-    saleId = response.sale_id
-    SaleModel.findById(saleId)
-      .then((sale)=>{
-        console.log(response.bid_price, sale.starting_price, sale.winning_bid)
-        if(response.bid_price > sale.starting_price  && response.bid_price > sale.winning_bid ){
-          SaleModel.findByIdAndUpdate(sale._id, {
-            winning_buyer: response.bidder_id,
-            winning_bid: response.bid_price
-          })
-          .then(()=>{
-            console.log(response)
-            res.status(200).json(response[0])
-          })
+  SaleModel.findById(saleId)
+  .then((sale)=>{
+    if(bid_price>sale.winning_bid){
+      BidModel.create({
+        winner: false,
+        sale_id: req.params.id,
+        bidder_id: req.session.loggedInUser._id,
+        bid_price,
+        bidder_username: req.session.loggedInUser.username
+      })
+      .then((bid)=>{
+        SaleModel.findByIdAndUpdate(bid.sale_id, {$set:{
+          winning_buyer: bid.bidder_id,
+          winning_bid: bid.bid_price
         }
-     
-        else{
-          res.status(500)
+         
+        })
+        .then(()=>{
+          res.status(200).json(bid)
+        })
+      })
+    }
+    else{
+      res.status(500)
           .json({
             errorMessage: 'Please enter your bid always surpassing the latest quantity'
           })
-         
-        }
-        
-      })
-    
+    }
   })
   .catch((err)=>{
     res.status(500).json({
@@ -140,7 +136,13 @@ router.post('/sale/:id', (req, res)=>{
       message: err,
     })
   })
+  
 })
+
+
+  
+
+
 
 
 

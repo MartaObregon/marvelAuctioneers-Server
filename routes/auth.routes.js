@@ -11,7 +11,7 @@ router.post('/register', (req, res)=>{
   if (!username || !email || !password) {
     res.status(500)
       .json({
-        errorMessage: 'Please enter username, email and password'
+        error: 'Please enter username, email and password'
       });
     return;  
   }
@@ -19,7 +19,7 @@ router.post('/register', (req, res)=>{
     if (!myRegex.test(email)) {
         res.status(500)
           .json({
-            errorMessage: 'Email format not correct'
+            error: 'Email format not correct'
         });
         return;  
     }
@@ -38,13 +38,13 @@ router.post('/register', (req, res)=>{
               .catch((err)=>{
                 if(err.code === 11000){
                   res.status(500).json({
-                    errorMessage: 'username or email entered already exists!'
+                    error: 'username or email entered already exists!'
                   });
                   return;
                 }
                 else{
                   res.status(500).json({
-                    errorMessage: 'Something went wrong!'
+                    error: 'Something went wrong!'
                   });
                   return;
                 }
