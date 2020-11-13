@@ -49,7 +49,7 @@ const logger       = require('morgan');
 app.use(logger('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));app.use(bodyParser.json()) 
+app.use(bodyParser.urlencoded({ extended: false }));
 
 
 // Express View engine setup
